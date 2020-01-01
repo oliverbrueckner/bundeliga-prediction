@@ -9,12 +9,10 @@ if(!require(jsonlite)) install.packages("jsonlite")
 
 
 ###
-# Gather the Data
+# Gather the Data. I load more years than I inspect later, because I need some historical data even for the first matches in the inspected time frame.
 ###
 years_loaded<-2012:2018
 years_inspected<-2014:2018
-#url <- 'https://www.openligadb.de/api/getmatchdata/bl1/2019'
-
 match_list<-lapply(years_loaded, function(y){
   match_url <- paste('https://www.openligadb.de/api/getmatchdata/bl1/', y, sep="")
   temp<-fromJSON(match_url,flatten=TRUE)%>%mutate(year=y)
@@ -24,19 +22,18 @@ match_list<-lapply(years_loaded, function(y){
 ranking_list<-lapply(years_loaded, function(y){
   ranking_url<- paste('https://www.openligadb.de/api/getbltable/bl1/', y, sep="")
   temp<-fromJSON(ranking_url,flatten=TRUE)%>%mutate(year=y)%>%select(TeamName, Points_This_Year=Points, year)
-#unnest(data = temp, cols = c(MatchResults))
   temp
-  })
+})
 
 
-match_data<-bind_rows(match_list)
+match_data<-bind_rows(match_list)%>%filter(ResultName=="Endergebnis")
 ranking_data<-bind_rows(ranking_list)
 
 ###
 # Prepare the Data
 ###
 
-matches<-match_data%>%filter(ResultName=="Endergebnis")%>%mutate(Begin=as.Date(MatchDateTime,"%Y-%m-%dT%H:%M:%S",tz="CET"),result=ifelse(PointsTeam1>PointsTeam2,1,ifelse(PointsTeam1==PointsTeam2,0,-1)))%>%select(Begin, Team1.TeamName,Team2.TeamName,PointsTeam1,PointsTeam2,year,result)
+matches<-match_data%>%mutate(Begin=as.Date(MatchDateTime,"%Y-%m-%dT%H:%M:%S",tz="CET"),result=ifelse(PointsTeam1>PointsTeam2,1,ifelse(PointsTeam1==PointsTeam2,0,-1)))%>%select(Begin, Team1.TeamName,Team2.TeamName,PointsTeam1,PointsTeam2,year,result)
 x<-matches%>%select(Begin,Team1.TeamName,Team2.TeamName,year)
 
 ###
