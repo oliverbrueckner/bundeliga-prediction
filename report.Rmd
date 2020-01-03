@@ -14,8 +14,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This is a report on unsing machin learning methods to build better prediction strategies for soccer results. The data used in this report is from the first German soccer league "Bundesliga". The data is loaded from https://www.openligadb.de/ by using its JSON api.
 
-This report is on the one hand somewhat familiar with the Lahman-report from XXX.
-On the other hand we try to predict an outcome based on the features of other similiar matches which is quiet familiar with the Netflix-Challange tasks from xxx. Because auf that I use the RMSE to demonstrate impovements of the predictions.
+This report is on the one hand somewhat familiar with the Lahman-report from the earlier courses.
+On the other hand we try to predict an outcome based on the features of other similiar matches which is quiet familiar with the Netflix-Challange tasks from the earlier courses. Because auf that I use the RMSE to demonstrate impovements of the predictions.
 
 Soccer is a sport game where 11 players on each side try to score more goals than the opponent team. A match has a duration of 90 minutes. The result of a match can be: Team 1 wins, Draw, Team 2 wins. A Team gets 3 point for a win and 1 point for a draw.
 
